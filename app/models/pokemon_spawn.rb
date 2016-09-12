@@ -8,8 +8,13 @@ class PokemonSpawn < ApplicationRecord
     self.pokemon.name
   end
 
+  def pokemon_icon
+    s = ENV['POKEMON_ICON_URL'].to_s
+    s.gsub('{id}',pokedex_number.to_s.rjust(3,'0'))
+  end
+
   def as_json(options = {})
-    options[:methods] = :pokemon_name
+    options[:methods] = [:pokemon_name, :pokemon_icon]
     super(options)
   end
 end
