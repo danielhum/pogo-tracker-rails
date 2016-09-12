@@ -9,7 +9,8 @@ gem 'jquery-rails'
 gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 gem 'httparty'
-gem 'sidekiq'
+gem 'sidekiq', '~> 4.1.2'
+gem "sidekiq-cron", "~> 0.4.0"
 gem 'redis'
 group :development, :test do
   gem 'byebug', platform: :mri

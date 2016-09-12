@@ -1,0 +1,4 @@
+update_spawns:
+  cron: "*/5 * * * *"
+  class: "UpdateSpawns"
+  queue: default
