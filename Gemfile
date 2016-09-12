@@ -12,6 +12,7 @@ gem 'httparty'
 gem 'sidekiq', '~> 4.1.2'
 gem "sidekiq-cron", "~> 0.4.0"
 gem 'redis'
+gem 'geocoder'
 group :development, :test do
   gem 'byebug', platform: :mri
 end
