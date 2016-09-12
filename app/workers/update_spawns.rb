@@ -18,10 +18,19 @@ class UpdateSpawns
       83,  # Farfetch'd
     ]
     since = $redis.get(KEY_INSERTED) || 0 if since.nil?
-    nums.each_slice(44) do |mons|
+    shuffled = nums.shuffle
+    idx = 65+rand(10)
+    slices = shuffled[0,idx], shuffled[idx..-1]
+    slices do |mons|
       url = ENV['UPDATE_SPAWNS_ENDPOINT'] + "?since=#{since}&mons=#{mons.join(',')}"
+      domain = ENV['UPDATE_SPAWNS_DOMAIN']
       puts url
-      r = HTTParty.get url
+      r = HTTParty.get(url, headers: {
+        "User-Agent" => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36",
+        "referer" => "https://#{domain}/",
+        "x-requested-with" => "XMLHttpRequest",
+        "authority" => domain
+      })
       json = JSON.load(r.body)
 
       pokemons = json['pokemons']
@@ -36,10 +45,11 @@ class UpdateSpawns
 
       if meta = json['meta']
         inserted = meta['inserted']
+        puts "inserted: #{inserted}"
         $redis.set KEY_INSERTED, inserted if !inserted.blank?
       end
 
-      sleep 10
+      sleep 10+rand(15)
     end
 
   end
