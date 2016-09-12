@@ -19,8 +19,9 @@ class UpdateSpawns
     ]
     since = $redis.get(KEY_INSERTED) || 0 if since.nil?
     nums.each_slice(44) do |mons|
-      r = HTTParty.get(ENV['UPDATE_SPAWNS_ENDPOINT'] + "?since=#{since}&mons=" \
-                       + mons.join(','))
+      url = ENV['UPDATE_SPAWNS_ENDPOINT'] + "?since=#{since}&mons=#{mons.join(',')}"
+      puts url
+      r = HTTParty.get url
       json = JSON.load(r.body)
 
       pokemons = json['pokemons']
@@ -37,6 +38,8 @@ class UpdateSpawns
         inserted = meta['inserted']
         $redis.set KEY_INSERTED, inserted if !inserted.blank?
       end
+
+      sleep 10
     end
 
   end
