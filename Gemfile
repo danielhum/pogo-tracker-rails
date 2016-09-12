@@ -27,6 +27,7 @@ gem 'slim-rails'
 group :development do
   gem 'better_errors'
   gem 'foreman'
+  gem 'dotenv'
   gem 'rails_layout'
   gem 'spring-commands-rspec'
 end
