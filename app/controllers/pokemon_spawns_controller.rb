@@ -10,7 +10,8 @@ class PokemonSpawnsController < ActionController::Metal
     ll = params[:ll]
     if ll
       spawns = PokemonSpawn.near(ll, 1.0, units: :km).
-                            where("expires_at > ?", Time.now.to_i)
+        where("expires_at > ?", Time.now.to_i).
+        includes(:pokemon)
       render json: spawns
     else
       head :bad_request
