@@ -7,20 +7,40 @@ class PokemonSpawnsController < ActionController::Metal
   use_renderers :json
 
   def index
-    last_run = $redis.get UpdateSpawns::KEY_INSERTED
-    if last_run.to_i < 7.minutes.ago.to_i
-      UpdateSpawns.new.perform(since: 0, split_requests: false)
+    ll = params[:ll]
+    if ll.nil?
+      head :bad_request
+      return
     end
 
-    ll = params[:ll]
-    if ll
-      spawns = PokemonSpawn.near(ll, 1.0, units: :km).
+    range = 1.2 #km
+
+    last_run = $redis.get UpdateSpawns::KEY_INSERTED
+    if last_run.to_i < 5.minutes.ago.to_i
+      spawns = UpdateSpawns.new.perform(since: 0,
+                                        split_requests: false,
+                                        save_spawns: false)
+      box = Geocoder::Calculations.bounding_box(ll, range)
+      # calculating distance between 2 points is slow, so filter first
+      spawns.keep_if{ |sp|
+        sp.latitude  >= box[0] && 
+        sp.longitude >= box[1] && 
+        sp.latitude  <= box[2] && 
+        sp.longitude <= box[3]
+      }
+      spawns.keep_if{ |sp|
+        Geocoder::Calculations.distance_between(
+          [sp.latitude, sp.longitude], ll) <= range
+      }
+      ActiveRecord::Associations::Preloader.new.preload(spawns,:pokemon)
+    else
+      spawns = PokemonSpawn.near(ll, range).
         where("expires_at > ?", Time.now.to_i).
         includes(:pokemon)
-      render json: spawns
-    else
-      head :bad_request
     end
+
+    render json: spawns
+
   end
 
 end
