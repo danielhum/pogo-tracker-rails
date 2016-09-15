@@ -7,6 +7,11 @@ class PokemonSpawnsController < ActionController::Metal
   use_renderers :json
 
   def index
+    last_run = $redis.get UpdateSpawns::KEY_INSERTED
+    if last_run.to_i < 7.minutes.ago.to_i
+      UpdateSpawns.new.perform(split_requests: false)
+    end
+
     ll = params[:ll]
     if ll
       spawns = PokemonSpawn.near(ll, 1.0, units: :km).
