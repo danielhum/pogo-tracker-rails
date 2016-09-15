@@ -14,13 +14,13 @@ class PokemonSpawnsController < ActionController::Metal
     end
 
     range = 1.2 #km
+    box = Geocoder::Calculations.bounding_box(ll, range)
 
     last_run = $redis.get UpdateSpawns::KEY_INSERTED
     if last_run.to_i < 5.minutes.ago.to_i
       spawns = UpdateSpawns.new.perform(since: 0,
                                         split_requests: false,
                                         save_spawns: false)
-      box = Geocoder::Calculations.bounding_box(ll, range)
       # calculating distance between 2 points is slow, so filter first
       spawns.keep_if{ |sp|
         sp.latitude  >= box[0] && 
@@ -34,7 +34,7 @@ class PokemonSpawnsController < ActionController::Metal
       }
       ActiveRecord::Associations::Preloader.new.preload(spawns,:pokemon)
     else
-      spawns = PokemonSpawn.near(ll, range).
+      spawns = PokemonSpawn.within_bounding_box(box).
         where("expires_at > ?", Time.now.to_i).
         includes(:pokemon)
     end
