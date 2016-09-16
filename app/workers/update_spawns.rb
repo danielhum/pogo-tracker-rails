@@ -53,7 +53,7 @@ class UpdateSpawns
         }
       end
 
-      if i == 0 and meta = json['meta']
+      if save_spawns and i == 0 and meta = json['meta']
         inserted = meta['inserted']
         puts "inserted: #{inserted}"
         $redis.set KEY_INSERTED, inserted if !inserted.blank?
