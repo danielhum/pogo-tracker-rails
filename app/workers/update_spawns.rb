@@ -45,7 +45,10 @@ class UpdateSpawns
         "User-Agent" => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36",
         "referer" => "https://#{domain}/",
         "x-requested-with" => "XMLHttpRequest",
-        "authority" => domain
+        "authority" => domain,
+        "accept-language" => "en-US,en;q=0.8",
+        "accept-encoding" => "gzip, deflate, sdch, br",
+        "accept" => "*/*"
       })
       json = JSON.load(r.body)
 
