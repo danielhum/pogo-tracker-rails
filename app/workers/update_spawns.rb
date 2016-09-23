@@ -3,7 +3,7 @@ class UpdateSpawns
 
   KEY_INSERTED = 'update_spawns:inserted_meta'
 
-  def perform(since: nil, split_requests: true, save_spawns: true)
+  def perform(since: nil, split_requests: false, save_spawns: true)
 
     nums = ENV['POKEMON_NUMS']
 
