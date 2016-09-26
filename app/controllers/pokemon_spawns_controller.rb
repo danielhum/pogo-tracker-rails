@@ -13,7 +13,7 @@ class PokemonSpawnsController < ActionController::Metal
       return
     end
 
-    range = 1.2 #km
+    range = 1.1 #km
     box = Geocoder::Calculations.bounding_box(ll, range)
 
     last_run = $redis.get UpdateSpawns::KEY_INSERTED
