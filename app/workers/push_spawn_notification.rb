@@ -16,7 +16,7 @@ class PushSpawnNotification
     spawns.each do |spawn|
       Rails.logger.info "Pushing Notification for [#{spawn.pokedex_number}]#{spawn.pokemon_name}"
     end
-    spawns.each_slice(10) do |push_spawns|
+    spawns.each_slice(5) do |push_spawns|
       HTTParty.post(FCM_BASE_URL, headers: {
         'Content-Type' => 'application/json',
         'Authorization' => "key=#{FCM_SERVER_KEY}"
