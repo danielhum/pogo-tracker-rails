@@ -18,8 +18,4 @@ class PokemonSpawn < ApplicationRecord
     options[:methods] = [:pokemon_name, :pokemon_icon]
     super(options)
   end
-
-  def push_spawn_notification
-    PushSpawnNotification.perform_async(self.id)
-  end
 end

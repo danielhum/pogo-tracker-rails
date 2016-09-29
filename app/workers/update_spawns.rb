@@ -54,6 +54,7 @@ class UpdateSpawns
 
       pokemons = json['pokemons']
       if pokemons
+        saved_spawn_ids = []
         pokemons.each{ |pk|
           pokedex_number = pk['pokemon_id'].to_i
           spawn = PokemonSpawn.new(pokedex_number: pokedex_number,
@@ -61,11 +62,12 @@ class UpdateSpawns
                                    longitude: pk['lng'].to_f,
                                    expires_at: pk['despawn'].to_i)
           if save_spawns and spawn.save
-            spawn.push_spawn_notification unless IGNORE_PUSH.include?(pokedex_number)
+            saved_spawn_ids << spawn.id unless IGNORE_PUSH.include?(pokedex_number)
           end
 
           all_spawns << spawn
         }
+        PushSpawnNotification.perform_async(saved_spawn_ids)
       end
 
       if save_spawns and i == 0 and meta = json['meta']
