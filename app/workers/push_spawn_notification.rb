@@ -11,7 +11,7 @@ class PushSpawnNotification
     end
 
     pokemon_spawn_ids = [pokemon_spawn_ids].flatten
-    spawns = PokemonSpawn.where(id: pokemon_spawn_ids)
+    spawns = PokemonSpawn.where(id: pokemon_spawn_ids).includes(:pokemon)
 
     spawns.each do |spawn|
       Rails.logger.info "Pushing Notification for [#{spawn.pokedex_number}]#{spawn.pokemon_name}"
