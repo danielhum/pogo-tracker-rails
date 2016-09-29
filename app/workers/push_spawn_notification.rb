@@ -11,7 +11,7 @@ class PushSpawnNotification
     end
 
     pokemon_spawn_ids = [pokemon_spawn_ids].flatten
-    spawns = PokemonSpawn.where(id: pokemon_spawn_id)
+    spawns = PokemonSpawn.where(id: pokemon_spawn_ids)
 
     spawns.each do |spawn|
       Rails.logger.info "Pushing Notification for [#{spawn.pokedex_number}]#{spawn.pokemon_name}"
@@ -21,7 +21,7 @@ class PushSpawnNotification
       'Authorization' => "key=#{FCM_SERVER_KEY}"
     }, body: {
       data: {
-        pokemon_spawns: spawns.as_json
+        pokemon_spawns: spawns.as_json(except: [:created_at, :updated_at])
       },
       to: '/topics/pokemon_spawns'
     }.to_json)
