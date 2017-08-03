@@ -35,7 +35,7 @@ class UpdateRaids
         #   "move1": "269",
         #   "move2": "270"
         # }
-        next unless pk['level'].to_i > 4
+        next unless pk['level'].to_i > 3
         pokedex_number = pk['pokemon_id'].to_i
         spawn = RaidSpawn.new(pokedex_number: pokedex_number,
                               latitude: pk['lat'].to_f,
