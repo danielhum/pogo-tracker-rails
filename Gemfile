@@ -13,6 +13,8 @@ gem 'sidekiq', '~> 4.1.2'
 gem "sidekiq-cron", "~> 0.4.0"
 gem 'redis'
 gem 'geocoder'
+gem 'slack-notifier', require: false # deploy and job notifications
+gem 'rb-readline'
 group :development, :test do
   gem 'byebug', platform: :mri
 end

@@ -1,9 +1,14 @@
-update_spawns:
-  cron: "*/1 * * * *"
-  class: "UpdateSpawns"
-  queue: default
+#update_spawns:
+#  cron: "*/1 * * * *"
+#  class: "UpdateSpawns"
+#  queue: default
 
 delete_expired_spawns:
   cron: "0 * * * *"
   class: "DeleteExpiredSpawns"
+  queue: default
+
+update_raids:
+  cron: "*/5 * * * *"
+  class: "UpdateRaids"
   queue: default
