@@ -8,4 +8,12 @@ class RaidSpawn < ApplicationRecord
   def pokemon_name
     self.pokemon.name
   end
+
+  def to_coordinates
+    [latitude, longitude]
+  end
+
+  def ll_string
+    to_coordinates.join(',')
+  end
 end
