@@ -25,7 +25,7 @@ class NotifySlack
             title: title,
             title_link: "https://www.google.com/maps/search/?api=1&query=#{text}",
             text: text,
-            image_url: "https://maps.googleapis.com/maps/api/staticmap?key=#{ENV['GOOGLE_MAPS_API_KEY']}&size=300x300&zoom=17&markers=#{spawn.ll_string}",
+            image_url: "https://maps.googleapis.com/maps/api/staticmap?key=#{ENV['GOOGLE_MAPS_API_KEY']}&size=400x300&zoom=17&markers=#{spawn.ll_string}",
             color: 'good'
           }
           puts text
