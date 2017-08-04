@@ -30,7 +30,7 @@ class NotifySlack
             color: 'good'
           }
           puts text
-          msg = spawn.level > 4 ? '@channel' : ''
+          msg = spawn.level > 4 ? '<!channel|@channel>' : ''
           NOTIFIER.ping msg, icon_emoji: ':pokeball:', attachments: [attachment]
         else
           puts "#{spawn.id} not within 1km"
