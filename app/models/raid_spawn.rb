@@ -3,7 +3,11 @@ class RaidSpawn < ApplicationRecord
   validates_presence_of   :pokedex_number, :longitude, :latitude, :expires_at
   validates_uniqueness_of :pokedex_number, scope: [:longitude, :latitude, :expires_at]
 
-  reverse_geocoded_by :latitude, :longitude
+  reverse_geocoded_by :latitude, :longitude do |raid_spawn, results|
+    if (geo = results.first)
+      raid_spawn.street = geo.address
+    end
+  end
 
   def pokemon_name
     self.pokemon.name

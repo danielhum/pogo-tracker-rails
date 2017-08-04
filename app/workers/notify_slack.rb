@@ -18,18 +18,20 @@ class NotifySlack
       spawns = RaidSpawn.where(id: raid_spawns).includes(:pokemon)
       spawns.each do |spawn|
         if Geocoder::Calculations.distance_between([1.309658,103.865530], spawn, units: :km).to_f < 2.0
-          title = "New Raid! #{spawn.pokemon_name}"
+          street = spawn.street || spawn.reverse_geocode
+          title = "New Raid! #{spawn.pokemon_name} @ #{street}"
           text  = [spawn.latitude, spawn.longitude].join(',')
           attachment = {
             fallback: "#{title} @ #{text}",
             title: title,
-            title_link: "https://www.google.com/maps/search/?api=1&query=#{text}",
+            title_link: "https://sgpokemap.com/gym.html",
             text: text,
             image_url: "https://maps.googleapis.com/maps/api/staticmap?key=#{ENV['GOOGLE_MAPS_API_KEY']}&size=400x300&zoom=17&markers=#{spawn.ll_string}",
             color: 'good'
           }
           puts text
-          NOTIFIER.ping "", icon_emoji: ":pokeball:", attachments: [attachment]
+          msg = spawn.level > 4 ? '@channel' : ''
+          NOTIFIER.ping msg, icon_emoji: ':pokeball:', attachments: [attachment]
         else
           puts "#{spawn.id} not within 1km"
         end
